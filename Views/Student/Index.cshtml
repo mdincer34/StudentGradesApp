@@ -4,25 +4,26 @@
 @{
     ViewData["Title"] = "Öğrenci Listesi";
     var passingGrade = ViewBag.PassingGrade;
-}
 
-@{
     var gradeTypes = ViewData["GradeTypes"] as List<GradeType>;
     var vizeWeight = gradeTypes?.FirstOrDefault(w => w.Name == "VIZE")?.Weight ?? 40;
     var finalWeight = gradeTypes?.FirstOrDefault(w => w.Name == "FINAL")?.Weight ?? 60;
 
+    if (vizeWeight == 0 || finalWeight == 0)
+    {
+        <div class="alert alert-warning">
+            Uyarı: Sınav ağırlıkları ayarlanmamış. Lütfen ağırlıkları güncelleyin.
+        </div>
+    }
+
     double? CalculateAverage(int? vizeNotu, int? finalNotu)
     {
-        if (!vizeNotu.HasValue || !finalNotu.HasValue)
+        if (!vizeNotu.HasValue || !finalNotu.HasValue || vizeWeight == 0 || finalWeight == 0)
         {
             return null;
         }
         double totalWeight = vizeWeight + finalWeight;
-        if (totalWeight == 0 || vizeWeight == 0 || finalWeight == 0)
-        {
-            return null;
-        }
-        return ((vizeNotu.Value * vizeWeight) + (finalNotu.Value * finalWeight)) / totalWeight;
+        return ((vizeNotu.Value * (vizeWeight / 100.0)) + (finalNotu.Value * (finalWeight / 100.0))) * 100 / totalWeight;
     }
 
     string CalculateFinalResult(double? ortalama, int passingGrade)
@@ -52,7 +53,7 @@
                 </form>
             </div>
         </div>
-        <a href="javascript:void(0);" onclick="loadPartialView('/GradeType/GradeWeights')" class="btn btn-secondary">Ağırlıklar</a>
+        <a href="javascript:void(0);" onclick="loadPartialView('/GradeType/GradeWeights'); return false;" class="btn btn-secondary">Ağırlıklar</a>
         <a href="javascript:void(0);" onclick="createStudent()" class="btn btn-primary m-2">Yeni Öğrenci Ekle</a>
     </div>
 </div>

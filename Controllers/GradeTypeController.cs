@@ -38,11 +38,18 @@ namespace StudentGradesApp.Controllers
             return PartialView("~/Views/GradeType/_EditGradeWeightPartial.cshtml", gradeType);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetGradeWeights()
+        {
+            var gradeTypes = await _gradeTypeRepository.GetAllGradeTypesAsync();
+            return Json(new { success = true, gradeTypes = gradeTypes });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditGradeWeight(int examType, int weight)
         {
-            return await ExecuteRepositoryAction(async () =>
+            var result = await ExecuteRepositoryAction(async () =>
             {
                 var gradeType = await _gradeTypeRepository.GetGradeTypeByIdAsync(examType);
                 if (gradeType == null)
@@ -60,8 +67,20 @@ namespace StudentGradesApp.Controllers
 
                 gradeType.Weight = weight;
                 await _gradeTypeRepository.UpdateGradeTypeAsync(gradeType);
-                return Json(new { success = true, message = "Sınav ağırlığı başarıyla güncellendi.", newWeight = weight });
+
+                var updatedGradeTypes = await _gradeTypeRepository.GetAllGradeTypesAsync();
+                var vizeWeight = updatedGradeTypes.FirstOrDefault(gt => gt.Name == "VIZE")?.Weight ?? 40;
+                var finalWeight = updatedGradeTypes.FirstOrDefault(gt => gt.Name == "FINAL")?.Weight ?? 60;
+
+                return Json(new { 
+                    success = true, 
+                    message = "Sınav ağırlığı başarıyla güncellendi.",
+                    vizeWeight = vizeWeight,
+                    finalWeight = finalWeight
+                });
             });
+
+            return result;
         }
     }
 }

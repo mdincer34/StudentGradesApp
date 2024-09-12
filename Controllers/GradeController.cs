@@ -82,7 +82,7 @@ namespace StudentGradesApp.Controllers
                 return NotFound();
             }
             ViewBag.GradeTypes = _gradeTypeService.GetDefaultGradeTypes();
-            return PartialView("_EditGradePartial", grade);
+            return PartialView("_AddOrUpdateGradePartial", grade);
         }
     }
 }

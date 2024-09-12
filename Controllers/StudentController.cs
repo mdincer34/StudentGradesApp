@@ -26,9 +26,9 @@ namespace StudentGradesApp.Controllers
         {
             await _gradeTypeRepository.EnsureDefaultGradeTypesExist();
             var students = await _studentRepository.GetAllStudentsAsync();
+            var gradeTypes = await _gradeTypeRepository.GetAllGradeTypesAsync();
             ViewData["PassingGrade"] = _passingGradeService.GetPassingGrade();
-            ViewData["GradeTypes"] = await _gradeTypeRepository.GetAllGradeTypesAsync();
-            ViewData["DefaultGradeTypes"] = _gradeTypeService.GetDefaultGradeTypes();
+            ViewData["GradeTypes"] = gradeTypes;
             return View(students);
         }
 
@@ -116,7 +116,7 @@ namespace StudentGradesApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["DefaultGradeTypes"] = _gradeTypeService.GetDefaultGradeTypes();
+            ViewData["DefaultGradeTypes"] = _gradeTypeRepository.GetAllGradeTypesAsync();
             return PartialView("_DetailsPartial", student);
         }
     }

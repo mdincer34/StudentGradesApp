@@ -34,7 +34,6 @@ namespace StudentGradesApp.Repositories
             await _context.SaveChangesAsync();
         }
 
-
         public async Task EnsureDefaultGradeTypesExist()
         {
             var requiredGradeTypes = _gradeTypeService.GetDefaultGradeTypes();
@@ -45,10 +44,10 @@ namespace StudentGradesApp.Repositories
                 {
                     _context.GradeTypes.Add(gradeType);
                 }
-                else if (existingType.Name != gradeType.Name || existingType.Weight != gradeType.Weight)
+
+                else if (existingType.Name != gradeType.Name)
                 {
                     existingType.Name = gradeType.Name;
-                    existingType.Weight = gradeType.Weight;
                     _context.GradeTypes.Update(existingType);
                 }
             }
