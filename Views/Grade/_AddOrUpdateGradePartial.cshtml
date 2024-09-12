@@ -1,0 +1,44 @@
+@model StudentGradesApp.Models.Grade
+@inject StudentGradesApp.Services.IGradeTypeService GradeTypeService
+
+<div class="modal-header">
+    <h5 class="modal-title">@(Model.GradeId == 0 ? "Not Ekle" : "Not Düzenle")</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Kapat">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<form id="addOrUpdateGradeForm" asp-controller="Grade" asp-action="AddOrUpdateGrade" method="post">
+    <div class="modal-body">
+        <input type="hidden" asp-for="StudentId" />
+        <input type="hidden" asp-for="GradeId" />
+        
+        <div class="form-group">
+            <label asp-for="GradeTypeId">Sınav Türü</label>
+            @if (Model.GradeId == 0)
+            {
+                <select asp-for="GradeTypeId" class="form-control" required>
+                    <option value="">Seçiniz</option>
+                    @foreach (var gradeType in ViewBag.AvailableGradeTypes)
+                    {
+                        <option value="@gradeType.ExamType">@gradeType.Name</option>
+                    }
+                </select>
+            }
+            else
+            {
+                <input type="hidden" asp-for="GradeTypeId" />
+                <input type="text" class="form-control" value="@GradeTypeService.GetNameById(Model.GradeTypeId)" readonly />
+            }
+            <span asp-validation-for="GradeTypeId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Score">Not</label>
+            <input asp-for="Score" class="form-control" type="number" min="0" max="100" required />
+            <span asp-validation-for="Score" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+    </div>
+</form>

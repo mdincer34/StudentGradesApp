@@ -1,0 +1,18 @@
+@model StudentGradesApp.Models.Student
+
+<div class="modal-header">
+    <h5 class="modal-title">Öğrenci Sil</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Kapat">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<form id="deleteStudentForm" asp-action="Delete" asp-route-id="@Model.StudentId" method="post">
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        <p>@Model.FirstName @Model.LastName isimli öğrenciyi silmek istediğinizden emin misiniz?</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+        <button type="submit" class="btn btn-danger">Sil</button>
+    </div>
+</form>

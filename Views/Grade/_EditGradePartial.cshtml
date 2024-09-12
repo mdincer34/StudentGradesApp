@@ -1,0 +1,27 @@
+@model StudentGradesApp.Models.Grade
+
+<div class="modal-header">
+    <h5 class="modal-title">Not Düzenle</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Kapat">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<form id="editGradeForm" asp-controller="Grade" asp-action="AddOrUpdateGrade" method="post">
+    <div class="modal-body">
+        <input type="hidden" name="studentId" value="@Model.StudentId" />
+        <input type="hidden" name="gradeTypeId" value="@Model.GradeTypeId" />
+        <div class="form-group">
+            <label asp-for="GradeType.Name">Sınav Türü</label>
+            <input asp-for="GradeType.Name" class="form-control" readonly />
+        </div>
+        <div class="form-group">
+            <label asp-for="Score">Not</label>
+            <input name="score" value="@Model.Score" class="form-control" />
+            <span asp-validation-for="Score" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+    </div>
+</form>

@@ -1,0 +1,40 @@
+@model StudentGradesApp.Models.GradeType
+
+@{
+    var otherGradeTypesWeight = ViewBag.OtherGradeTypesWeight as int? ?? 0;
+}
+
+@if (Model != null)
+{
+    <div class="modal-header">
+        <h5 class="modal-title">Not Ağırlığını Düzenle</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Kapat">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <form id="editGradeWeightForm" asp-action="EditGradeWeight" method="post">
+        <div class="modal-body">
+            <input type="hidden" asp-for="ExamType" />
+            <input type="hidden" id="otherGradeTypesWeight" value="@otherGradeTypesWeight" />
+            <input type="hidden" id="originalWeight" value="@Model.Weight" />
+            <div class="form-group">
+                <label asp-for="Name">Sınav Türü</label>
+                <input asp-for="Name" class="form-control" readonly />
+            </div>
+            <div class="form-group">
+                <label asp-for="Weight">Ağırlık</label>
+                <input asp-for="Weight" id="weightInput" class="form-control" />
+                <span asp-validation-for="Weight" class="text-danger"></span>
+                <span id="weightWarning" class="text-danger" style="display:none;">Toplam ağırlık 100'ü geçemez.</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+            <button type="submit" id="submitButton" class="btn btn-primary">Kaydet</button>
+        </div>
+    </form>
+}
+else
+{
+    <p>Not türü bulunamadı.</p>
+}
