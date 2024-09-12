@@ -23,7 +23,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Weight">Ağırlık</label>
-                <input asp-for="Weight" id="weightInput" class="form-control" />
+                <input asp-for="Weight" id="weightInput" class="form-control" type="number" min="0" max="100" required />
                 <span asp-validation-for="Weight" class="text-danger"></span>
                 <span id="weightWarning" class="text-danger" style="display:none;">Toplam ağırlık 100'ü geçemez.</span>
             </div>
